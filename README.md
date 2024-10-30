@@ -9,15 +9,18 @@ The USB keyboard protocol was reverse engineered, [protocol documentation can be
 - ### Macro Settings
   | Function name | API | CLI | GUI |
   |---------------|-----|-----|-----|
-  | Macro key     | [ ] | [ ] | [ ] |
-  | Single key    | [ ] | [ ] | [ ] |
-  | Media key     | [ ] | [ ] | [ ] |
-  | Function key  | [ ] | [ ] | [ ] |
+  | Macro key     | -   | -   | -   |
+  | Single key    | -   | -   | -   |
+  | Media key     | -   | -   | -   |
+  | Function key  | -   | -   | -   |
 - ### LED Settings
   | Function name     | API | CLI | GUI |
   |-------------------|-----|-----|-----|
-  | Animation effects | [ ] | [ ] | [ ] |
-  | Animation speed   | [ ] | [ ] | [ ] |
-  | LED Brightness    | [ ] | [ ] | [ ] |
+  | Animation effects | -   | -   | -   |
+  | Animation speed   | -   | -   | -   |
+  | LED Brightness    | -   | -   | -   |
 
-- [ ] **Reset default configuration**
+- ### Other functions
+  | Function name                | API | CLI | GUI |
+  |------------------------------|-----|-----|-----|
+  | Reset default configuration  | -   | -   | -   |
