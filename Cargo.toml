@@ -1,0 +1,17 @@
+[workspace]
+members = ["api", "cli", "gui"]
+
+[workspace.dependencies]
+
+[workspace.package]
+edition = "2021"
+
+[workspace.package.release]
+opt-level = "z"
+lto = "fat"
+debug = true
+codegen-units = 1
+panic = 'abort'
+strip = true
+debug-assertions = false
+overflow-checks = false
