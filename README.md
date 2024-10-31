@@ -16,9 +16,9 @@ The USB keyboard protocol was reverse engineered, [protocol documentation can be
 - ### LED Settings
   | Function name     | API | CLI | GUI |
   |-------------------|-----|-----|-----|
-  | Animation effects | -   | -   | -   |
+  | Animation effects | +   | +   | -   |
   | Animation speed   | -   | -   | -   |
-  | LED Brightness    | -   | -   | -   |
+  | LED Brightness    | +   | +   | -   |
 
 - ### Other functions
   | Function name                | API | CLI | GUI |
