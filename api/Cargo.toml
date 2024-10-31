@@ -5,3 +5,6 @@ edition = "2021"
 
 [dependencies]
 nusb = "0.1.10"
+anyhow = "1.0.91"
+futures-lite = "2.4.0"
+rusb = "0.9.4"
