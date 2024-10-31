@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build GUI" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+  <configuration default="false" name="Build GUI release" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
     <option name="buildProfileId" value="release" />
     <option name="command" value="build --release --package gui" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
