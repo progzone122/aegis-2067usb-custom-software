@@ -1,8 +1,6 @@
 [workspace]
 members = ["api", "cli", "gui"]
 
-[workspace.dependencies]
-
 [workspace.package]
 edition = "2021"
 
