@@ -45,24 +45,28 @@ impl Config {
     }
 
     pub fn set_animation(&mut self, animation: u8) {
-        self.save();
         self.animation = animation;
+        self.save();
     }
 
     pub fn set_speed(&mut self, speed: u8) {
-        self.save();
         self.speed = speed;
+        self.save();
     }
 
     pub fn set_brightness(&mut self, brightness: u8) {
-        self.save();
         self.brightness = brightness;
+        self.save();
     }
 
     fn save(&mut self) {
         let section: &mut Properties = self.config.section_mut(Some("led")).expect("Failed to find section [led]");
 
-        section.insert("animation", format!("0x{:02X}", self.animation));
+        println!("{}", format!("0x{:02X}", self.animation));
+        println!("{}", format!("0x{:02X}", self.speed));
+        println!("{}", format!("0x{:02X}", self.brightness));
+
+        section.insert("animation", self.animation.to_string());
         section.insert("speed", format!("0x{:02X}", self.speed));
         section.insert("brightness", format!("0x{:02X}", self.brightness));
 
