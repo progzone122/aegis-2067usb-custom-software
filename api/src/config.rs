@@ -1,3 +1,4 @@
+use std::fs;
 use std::path::{Path, PathBuf};
 use ini::{Ini, Properties};
 use dirs::config_dir;
@@ -15,9 +16,24 @@ impl Config {
     pub fn load() -> Self {
         let mut path: PathBuf = config_dir().expect("Could not determine config directory");
         path.push("aegis-2067usb");
+
+        fs::create_dir_all(&path).expect("Failed to create config directory");
+
         path.push("config.conf");
 
-        let config = Ini::load_from_file(&path).expect("Failed to load configuration file");
+        let config: Ini = if path.exists() {
+            Ini::load_from_file(&path).expect("Failed to load configuration file")
+        } else {
+            let mut new_config: Ini = Ini::new();
+            new_config.with_section(Some("led"))
+                .set("animation", "0x00")
+                .set("speed", "0x02")
+                .set("brightness", "0x05");
+
+            new_config.write_to_file(&path).expect("Failed to create configuration file");
+            new_config
+        };
+
         let section = config.section(Some("led")).expect("Failed to find section [led]");
 
         let animation: u8 = section.get("animation")
