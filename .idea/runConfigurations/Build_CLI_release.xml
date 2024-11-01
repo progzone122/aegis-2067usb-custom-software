@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Build CLI release" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-    <option name="command" value="build --release --package cli" />
+    <option name="buildProfileId" value="release" />
+    <option name="command" value="build --package cli" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />
     <option name="emulateTerminal" value="true" />

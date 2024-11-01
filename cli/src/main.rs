@@ -2,27 +2,9 @@ use anyhow::{Context, Result};
 use api::led::LED;
 use api::Api;
 use clap::ArgMatches;
+use api::config::Config;
 
-macro_rules! define_animation_subcommand {
-    () => {
-        clap::Command::new("animation")
-            .arg(
-                clap::Arg::new("value")
-                    .required(true)
-                    .index(1),
-            )
-    };
-}
-macro_rules! define_brightness_subcommand {
-    () => {
-        clap::Command::new("brightness")
-            .arg(
-                clap::Arg::new("value")
-                    .required(true)
-                    .index(1),
-            )
-    };
-}
+mod subcommands;
 
 fn main() -> Result<()> {
     let matches: ArgMatches = clap::Command::new(env!("CARGO_PKG_NAME"))
@@ -31,12 +13,13 @@ fn main() -> Result<()> {
         .about(env!("CARGO_PKG_DESCRIPTION"))
         .subcommand(define_animation_subcommand!())
         .subcommand(define_brightness_subcommand!())
+        .subcommand(define_speed_subcommand!())
         .get_matches();
 
     let api: Api = Api::default();
     let device = api.connect_device(0);
 
-    let mut led_settings: LED = LED::default();
+    let mut config: Config = Config::load();
 
     match device {
         Ok(interface) => {
@@ -54,8 +37,7 @@ fn main() -> Result<()> {
                     if let Ok(id) = value.parse::<u8>() {
                         if let Some(animation) = api::values::AnimationEffect::find_id(id as usize)
                         {
-                            led_settings
-                                .change_animation_effect(interface, animation.hex)
+                            LED::change_animation_effect(&mut config, interface, animation.hex)
                                 .with_context(|| {
                                     format!("Failed to change animation effect to ID {}", id)
                                 })?;
@@ -63,8 +45,7 @@ fn main() -> Result<()> {
                             eprintln!("[ERROR] Animation effect not found for ID: {}", id);
                         }
                     } else if let Some(animation) = api::values::AnimationEffect::find_name(value) {
-                        led_settings
-                            .change_animation_effect(interface, animation.hex)
+                        LED::change_animation_effect(&mut config, interface, animation.hex)
                             .with_context(|| {
                                 format!("Failed to change animation effect to name {}", value)
                             })?;
@@ -79,10 +60,23 @@ fn main() -> Result<()> {
                         .as_str();
 
                     if let Ok(brightness) = value.parse::<u8>() {
-                        led_settings
-                            .change_brightness(interface, brightness)
+                        println!("0x{:02X}", brightness);
+                        LED::change_brightness(&mut config, interface, brightness)
                             .with_context(|| {
                                 format!("Failed to change brightness {}", brightness)
+                            })?;
+                    }
+                }
+                Some(("speed", sub_m)) => {
+                    let value: &str = sub_m
+                        .get_one::<String>("value")
+                        .expect("value argument is required")
+                        .as_str();
+
+                    if let Ok(speed) = value.parse::<u8>() {
+                        LED::change_speed(&mut config, interface, speed)
+                            .with_context(|| {
+                                format!("Failed to change speed {}", speed)
                             })?;
                     }
                 }

@@ -1,20 +1,19 @@
 pub mod led;
 pub mod values;
+pub mod config;
 
-use anyhow::{Result, Context, anyhow};
+use anyhow::{Result, Context};
 use nusb;
 
 pub struct Api {
     pub vid: u16,
-    pub pid: u16,
-    pub interface: Option<nusb::Interface>
+    pub pid: u16
 }
 impl Default for Api {
     fn default() -> Self {
         Self {
             vid: 0x1A2C,
             pid: 0x9CF4,
-            interface: None
         }
     }
 }
@@ -24,7 +23,6 @@ impl Api {
         Self {
             vid,
             pid,
-            interface: None
         }
     }
     fn get_device(&self) -> Result<nusb::DeviceInfo> {

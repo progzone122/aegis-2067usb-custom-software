@@ -1,24 +1,11 @@
 use nusb::transfer::{Control, ControlType, Recipient};
 use anyhow::{Result, Context, anyhow};
-use crate::values::AnimationEffect;
+use crate::config::Config;
 
-pub struct LED {
-    animation: u8,
-    speed: u8,
-    brightness: u8,
-}
+pub struct LED;
 
-impl Default for LED {
-    fn default() -> Self {
-        Self {
-            animation: 0x00,
-            speed: 0x02,
-            brightness: 0x05,
-        }
-    }
-}
 impl LED {
-    fn build_command(&self, interface: nusb::Interface, animation_effect: u8, brightness: u8, speed: u8) -> Result<usize> {
+    fn build_command(interface: nusb::Interface, animation_effect: u8, brightness: u8, speed: u8) -> Result<usize> {
         let result: usize = interface.control_out_blocking(Control {
             control_type: ControlType::Class,
             recipient: Recipient::Interface,
@@ -29,18 +16,25 @@ impl LED {
 
         Ok(result)
     }
-    pub fn change_animation_effect(&mut self, interface: nusb::Interface, animation_effect: u8) -> Result<usize> {
-        self.animation = animation_effect;
+    pub fn change_animation_effect(config: &mut Config, interface: nusb::Interface, animation_effect: u8) -> Result<usize> {
+        config.set_animation(animation_effect);
 
-        Ok(self.build_command(interface, self.animation, self.brightness, self.speed)?)
+        Ok(LED::build_command(interface, config.animation, config.brightness, config.speed)?)
     }
-    pub fn change_brightness(&mut self, interface: nusb::Interface, brightness: u8) -> Result<usize> {
+    pub fn change_speed(config: &mut Config, interface: nusb::Interface, speed: u8) -> Result<usize> {
+        if speed > 2 {
+            Err(anyhow!("Invalid brightness value: must be between 0 and 2"))?
+        }
+        config.set_speed(speed);
+
+        Ok(LED::build_command(interface, config.animation, config.brightness, speed)?)
+    }
+    pub fn change_brightness(config: &mut Config, interface: nusb::Interface, brightness: u8) -> Result<usize> {
         if brightness > 5 {
             Err(anyhow!("Invalid brightness value: must be between 0 and 5"))?
         }
-        self.brightness = brightness;
+        config.set_brightness(brightness);
 
-        Ok(self.build_command(interface, self.animation, self.brightness, self.speed)?)
+        Ok(LED::build_command(interface, config.animation, brightness, config.speed)?)
     }
 }
-
