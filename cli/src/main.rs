@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
-use api::led::LED;
 use api::Api;
+use api::led::led;
 use clap::ArgMatches;
 use api::config::Config;
 
@@ -37,7 +37,7 @@ fn main() -> Result<()> {
                     if let Ok(id) = value.parse::<u8>() {
                         if let Some(animation) = api::values::AnimationEffect::find_id(id as usize)
                         {
-                            LED::change_animation_effect(&mut config, interface, animation.hex)
+                            led::change_animation_effect(&mut config, interface, animation.hex)
                                 .with_context(|| {
                                     format!("Failed to change animation effect to ID {}", id)
                                 })?;
@@ -45,7 +45,7 @@ fn main() -> Result<()> {
                             eprintln!("[ERROR] Animation effect not found for ID: {}", id);
                         }
                     } else if let Some(animation) = api::values::AnimationEffect::find_name(value) {
-                        LED::change_animation_effect(&mut config, interface, animation.hex)
+                        led::change_animation_effect(&mut config, interface, animation.hex)
                             .with_context(|| {
                                 format!("Failed to change animation effect to name {}", value)
                             })?;
@@ -60,8 +60,7 @@ fn main() -> Result<()> {
                         .as_str();
 
                     if let Ok(brightness) = value.parse::<u8>() {
-                        println!("0x{:02X}", brightness);
-                        LED::change_brightness(&mut config, interface, brightness)
+                        led::change_brightness(&mut config, interface, brightness)
                             .with_context(|| {
                                 format!("Failed to change brightness {}", brightness)
                             })?;
@@ -74,7 +73,7 @@ fn main() -> Result<()> {
                         .as_str();
 
                     if let Ok(speed) = value.parse::<u8>() {
-                        LED::change_speed(&mut config, interface, speed)
+                        led::change_speed(&mut config, interface, speed)
                             .with_context(|| {
                                 format!("Failed to change speed {}", speed)
                             })?;

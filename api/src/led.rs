@@ -2,9 +2,9 @@ use nusb::transfer::{Control, ControlType, Recipient};
 use anyhow::{Result, Context, anyhow};
 use crate::config::Config;
 
-pub struct LED;
+pub mod led {
+    use super::*;
 
-impl LED {
     fn build_command(interface: nusb::Interface, animation_effect: u8, brightness: u8, speed: u8) -> Result<usize> {
         let result: usize = interface.control_out_blocking(Control {
             control_type: ControlType::Class,
@@ -19,7 +19,7 @@ impl LED {
     pub fn change_animation_effect(config: &mut Config, interface: nusb::Interface, animation_effect: u8) -> Result<usize> {
         config.set_animation(animation_effect);
 
-        Ok(LED::build_command(interface, config.animation, config.brightness, config.speed)?)
+        Ok(build_command(interface, config.animation, config.brightness, config.speed)?)
     }
     pub fn change_speed(config: &mut Config, interface: nusb::Interface, speed: u8) -> Result<usize> {
         if speed > 2 {
@@ -27,7 +27,7 @@ impl LED {
         }
         config.set_speed(speed);
 
-        Ok(LED::build_command(interface, config.animation, config.brightness, speed)?)
+        Ok(build_command(interface, config.animation, config.brightness, speed)?)
     }
     pub fn change_brightness(config: &mut Config, interface: nusb::Interface, brightness: u8) -> Result<usize> {
         if brightness > 5 {
@@ -35,6 +35,6 @@ impl LED {
         }
         config.set_brightness(brightness);
 
-        Ok(LED::build_command(interface, config.animation, brightness, config.speed)?)
+        Ok(build_command(interface, config.animation, brightness, config.speed)?)
     }
 }
