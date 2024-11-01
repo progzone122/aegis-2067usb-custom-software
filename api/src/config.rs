@@ -1,5 +1,6 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use ini::{Ini, Properties};
+use dirs::config_dir;
 
 #[derive(Debug)]
 pub struct Config {
@@ -7,14 +8,16 @@ pub struct Config {
     pub speed: u8,
     pub brightness: u8,
     config: Ini,
-    path: String
+    path: PathBuf
 }
 
 impl Config {
     pub fn load() -> Self {
-        let path: String = "~/.config/aegis-2067usb/config.conf".replace("~", &std::env::var("HOME").unwrap());
+        let mut path: PathBuf = config_dir().expect("Could not determine config directory");
+        path.push("aegis-2067usb");
+        path.push("config.conf");
 
-        let config = Ini::load_from_file(Path::new(&path)).expect("Failed to load configuration file");
+        let config = Ini::load_from_file(&path).expect("Failed to load configuration file");
         let section = config.section(Some("led")).expect("Failed to find section [led]");
 
         let animation: u8 = section.get("animation")
@@ -62,14 +65,10 @@ impl Config {
     fn save(&mut self) {
         let section: &mut Properties = self.config.section_mut(Some("led")).expect("Failed to find section [led]");
 
-        println!("{}", format!("0x{:02X}", self.animation));
-        println!("{}", format!("0x{:02X}", self.speed));
-        println!("{}", format!("0x{:02X}", self.brightness));
-
         section.insert("animation", self.animation.to_string());
         section.insert("speed", format!("0x{:02X}", self.speed));
         section.insert("brightness", format!("0x{:02X}", self.brightness));
 
-        self.config.write_to_file(Path::new(&self.path)).expect("Failed to save configuration file");
+        self.config.write_to_file(&self.path).expect("Failed to save configuration file");
     }
 }
