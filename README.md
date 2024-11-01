@@ -22,4 +22,4 @@ The USB keyboard protocol was reverse engineered, [protocol documentation can be
 - ### Other functions
   | Function name               | API | CLI | GUI |
   |-----------------------------|-----|-----|-----|
-  | Reset default configuration | -   | -   | -   |
+  | Reset default configuration | +   | +   | -   |

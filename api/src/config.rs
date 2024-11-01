@@ -81,7 +81,7 @@ impl Config {
     fn save(&mut self) {
         let section: &mut Properties = self.config.section_mut(Some("led")).expect("Failed to find section [led]");
 
-        section.insert("animation", self.animation.to_string());
+        section.insert("animation", format!("0x{:02X}", self.animation));
         section.insert("speed", format!("0x{:02X}", self.speed));
         section.insert("brightness", format!("0x{:02X}", self.brightness));
 

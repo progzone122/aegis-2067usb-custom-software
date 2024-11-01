@@ -3,6 +3,7 @@ use api::Api;
 use api::led::led;
 use clap::ArgMatches;
 use api::config::Config;
+use api::other::other;
 
 mod subcommands;
 
@@ -14,6 +15,7 @@ fn main() -> Result<()> {
         .subcommand(define_animation_subcommand!())
         .subcommand(define_brightness_subcommand!())
         .subcommand(define_speed_subcommand!())
+        .subcommand(define_reset_subcommand!())
         .get_matches();
 
     let api: Api = Api::default();
@@ -78,6 +80,10 @@ fn main() -> Result<()> {
                                 format!("Failed to change speed {}", speed)
                             })?;
                     }
+                }
+                Some(("reset", _)) => {
+                    other::reset_settings(&mut config, interface)
+                        .with_context(|| "Failed to reset settings")?;
                 }
                 None => {
                     eprintln!("[ERROR] No valid subcommand provided");

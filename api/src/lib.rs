@@ -1,9 +1,11 @@
 pub mod led;
 pub mod values;
 pub mod config;
+pub mod other;
 
 use anyhow::{Result, Context};
 use nusb;
+use nusb::transfer::{Control, ControlType, Recipient};
 
 pub struct Api {
     pub vid: u16,
@@ -44,5 +46,16 @@ impl Api {
         let interface: nusb::Interface = connection.detach_and_claim_interface(interface)?;
 
         Ok(interface)
+    }
+    pub fn build_command(interface: nusb::Interface, animation_effect: u8, brightness: u8, speed: u8) -> Result<usize> {
+        let result: usize = interface.control_out_blocking(Control {
+            control_type: ControlType::Class,
+            recipient: Recipient::Interface,
+            request: 0x09,
+            value: 0x0207,
+            index: 0,
+        }, &mut [0x07, 0xff, 0xff, animation_effect, brightness, speed, 0x00, 0x00], Default::default())?;
+
+        Ok(result)
     }
 }
