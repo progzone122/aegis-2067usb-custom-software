@@ -40,6 +40,9 @@ aegis2067usb --speed 2
   ```bash
   sudo udevadm control --reload
   ```
+    ```bash
+  sudo udevadm trigger
+  ```
 
 - ### Build package
   - #### CLI version:
