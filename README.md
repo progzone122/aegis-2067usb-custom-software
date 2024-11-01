@@ -9,12 +9,13 @@ The USB keyboard protocol was reverse engineered, [protocol documentation can be
 aegis2067usb [COMMAND]
 ```
 #### Commands:
-| Command                  | Description                                               |
-|--------------------------|-----------------------------------------------------------|
-| help                     | Print this message or the help of the given subcommand(s) |
-| animation **[ID/ NAME]** | Configuration of animation effect                         |
-| brightness **[0..5]**    | Configuration of LED brightness                           |
-| speed **[0..2]**         | Configuration of speed animation effect                   |
+| Command                    | Description                                               |
+|----------------------------|-----------------------------------------------------------|
+| --help                     | Print this message or the help of the given subcommand(s) |
+| --animation **[ID/ NAME]** | Configuration of animation effect                         |
+| --brightness **[0..5]**    | Configuration of LED brightness                           |
+| --speed **[0..2]**         | Configuration of speed animation effect                   |
+| reset                      | Resets the default keyboard configuration                 |
 
 ##### Examples:
 ```bash
@@ -25,6 +26,9 @@ aegis2067usb --brightness 3
 ```
 ```bash
 aegis2067usb --speed 2
+```
+```bash
+aegis2067usb reset
 ```
 
 ## Build guide
